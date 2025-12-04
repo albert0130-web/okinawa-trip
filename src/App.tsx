@@ -20,26 +20,25 @@ import {
   Utensils, ShoppingBag, Hotel, CloudRain, Pencil, Printer, FileText
 } from 'lucide-react';
 
-// --- 1. Firebase 初始化 ---
-let app, auth, db;
-const appId = 'default-app-id';
-let globalIsLocalMode = false;
 
-try {
-  // @ts-ignore
-  if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-    // @ts-ignore
-    const firebaseConfig = JSON.parse(__firebase_config);
-    app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-  } else {
-    throw new Error("Local Mode");
-  }
-} catch (e) {
-  console.log("啟動本機預覽模式");
-  globalIsLocalMode = true;
-}
+// --- 1. Firebase 初始化 ---
+const firebaseConfig = {
+  apiKey: "AIzaSyBZ5F43XzNj6qN1lGsYUQ7kXgTppBoTEx8",
+  authDomain: "okinawa-6565b.firebaseapp.com",
+  projectId: "okinawa-6565b",
+  storageBucket: "okinawa-6565b.firebasestorage.app",
+  messagingSenderId: "996557569838",
+  appId: "1:996557569838:web:37da159508c667374d84bf",
+  measurementId: "G-XTL0VN1Y4F"
+};
+
+// 直接初始化 Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = 'default-app-id'; 
+// 強制關閉本機模式，使用雲端資料庫
+let globalIsLocalMode = false;
 
 // --- 2. 資料設定 ---
 const WORLD_CITIES = [
@@ -99,7 +98,7 @@ const INITIAL_INFO = {
       name: 'Glory island okinawa -SOBE-', 
       address: '那覇市壺川...', 
       tel: '098-863-7777',
-      note: '密碼: 1234',
+      note: '飯店式',
       link: 'https://tw.hotels.com/ho2670247488/glory-island-okinawa-sobe-di-ke-si-ke-fu-jia-na/'
     },
     { 
@@ -107,7 +106,7 @@ const INITIAL_INFO = {
       name: 'Family Condo Chatan Hills', 
       address: '北谷町...', 
       tel: '098-926-1010',
-      note: '含早餐',
+      note: '【Check-in/Check-out Code】463998 https://connect.minpakuin.jp/register/AAABI3Ph8jhCco_ZxZeyReviI2jq-YRtqyg',
       link: 'https://www.google.com/url?url=https%3A%2F%2Fsunrest-resort.com%2Ffacility%2Fthehotelchatan%2F'
     },
     { 
@@ -115,7 +114,7 @@ const INITIAL_INFO = {
       name: 'Private Condo Chatan Jagaru', 
       address: '北谷町...', 
       tel: '098-xxx-xxxx',
-      note: '有廚房',
+      note: 'URL https://connect.minpakuin.jp/register/AAABI0pjSW915--6EPlkq1gFFm97L-W99ig',
       link: 'https://tw.hotels.com/ho1918159776/private-condo-chatan-jagaru-by-coldio-premium-bei-gu-ri-ben/'
     },
   ]
@@ -133,7 +132,7 @@ const INITIAL_ITINERARY = [
       { id: 'd1-3', time: '20:50', title: '抵達那霸機場', location: '那霸機場', travelTime: '飛行 90分', image: '/images/day1_4.png' },
       { id: 'd1-4', time: '21:10', title: '出境', location: '那霸機場', image: '/images/day1_5.png', desc: '準備好入境資料QR Code' },
       { id: 'd1-5', time: '21:30', title: '搭乘單軌電車', location: '那覇空港駅', travelTime: '電車 10分', image: '/images/day1_6.png', desc: `坐往壺川站\n票價:\n大人: 290\n小孩: 150` },
-      { id: 'd1-6', time: '21:55', title: '入住飯店', location: 'Glory island okinawa -SOBE-', travelTime: '步行 15分', image: '/images/day1_7.png', desc: 'Hotels.com 行程編號：73305401005050', introImages: ['/images/day1_7.png'] },
+      { id: 'd1-6', time: '21:55', title: '入住飯店', location: 'Glory island okinawa -SOBE-', travelTime: '步行 15分', image: '/images/day1_7.png', desc: 'Hotels.com 行程編號：73305401005050 Check-in/Check-out Code】        70833 / 053902 ', introImages: ['/images/day1_7.png'] },
     ]
   },
   {
@@ -151,7 +150,7 @@ const INITIAL_ITINERARY = [
       { id: 'd2-7', time: '16:00', title: '中本天婦羅店', location: '中本天婦羅店', travelTime: '車程10分', image: '/images/day2_7.png' },
       { id: 'd2-8', time: '16:40', title: '知念岬公園', location: '知念岬公園', travelTime: '車程20分', image: '/images/day2_8.png', desc: '海濱公園與漫步區' },
       { id: 'd2-9', time: '18:00', title: 'COSTCO 晚餐', location: 'Costco Nanjo', travelTime: '車程 20分', image: '/images/day2_9.png', desc: '好市多' },
-      { id: 'd2-10', time: '20:30', title: '回飯店', location: 'Family Condo Chatan Hills', travelTime: '車程 40分', image: '/images/day2_10.png' },
+      { id: 'd2-10', time: '20:30', title: '回飯店', location: 'Family Condo Chatan Hills', travelTime: '車程 40分', image: '/images/day2_10.png', desc: '訪客登記: https://connect.minpakuin.jp/register/AAABI3Ph8jhCco_ZxZeyReviI2jq-YRtqyg 第二駐車場：https://maps.app.goo.gl/pzZN7DY8kBRwt1Ee7' },
     ]
   },
   {
@@ -182,7 +181,7 @@ const INITIAL_ITINERARY = [
       { id: 'd4-4', time: '13:30', title: '美麗海水族館', location: 'Churaumi Aquarium', travelTime: '車程 20分', image: '/images/day4_4_1.png', desc: '海豚表演時間：13:00 / 15:00' },
       { id: 'd4-5', time: '17:00', title: '備瀨福木林道', location: 'Bise Fukugi Tree Road', travelTime: '車程 10分', image: '/images/day4_5.png' },
       { id: 'd4-6', time: '18:00', title: '晚餐', location: '', travelTime: '車程 20分', image: '/images/day4_6.png' },
-      { id: 'd4-7', time: '20:30', title: '回飯店', location: 'Private Condo Chatan Jagaru', travelTime: '車程 60分', image: '/images/day4_7.png' },
+      { id: 'd4-7', time: '20:30', title: '回飯店', location: 'Private Condo Chatan Jagaru', travelTime: '車程 60分', image: '/images/day4_7.png', desc:'訪客登記: https://connect.minpakuin.jp/register/AAABI0pjSW915--6EPlkq1gFFm97L-W99ig' },
     ]
   },
   {
@@ -295,7 +294,7 @@ export default function OkinawaTravelApp() {
 
   // --- Helpers ---
   const handleImageUpload = (e, setFn) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if(file) {
       const reader = new FileReader();
       reader.onloadend = () => setFn(reader.result);
@@ -321,7 +320,7 @@ export default function OkinawaTravelApp() {
       location: event.location,
       desc: event.desc || ''
     });
-    setNewEventImage(event.image);
+    setNewEventImage(event.image || null);
     setIsEditingEvent(true);
     setEditingEventId(event.id);
     setShowAddEvent(true);
